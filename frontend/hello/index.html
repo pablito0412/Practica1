@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./src/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Ping al Web Services</h1>
+      <div class="card">
+        <p>Message:</p>
+        <div id="message">Esperando...</div>
+      </div>
+      <button id="pingButton">Ping</button>
+      
+    </div>
+    <script>
+      document.getElementById('pingButton').addEventListener('click', () => {
+        const messageDiv = document.getElementById('message');
+        messageDiv.textContent = 'Consultando...';
+    
+        fetch('http://localhost:3000/ping')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`Error HTTP: ${response.status}`); // CORREGIDO: uso de backticks
+            }
+            return response.json();
+          })
+          .then(data => {
+            messageDiv.textContent = data.message;
+          })
+          .catch(error => {
+            messageDiv.textContent = 'no se puede conectar al sercidor verifique la url';
+            console.error('Error al hacer fetch:', error);
+          });
+      });
+    </script>
+    
+  </body>
+</html>
