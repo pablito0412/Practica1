@@ -7,7 +7,7 @@ const server = express();
 server.use(cors());
 
 // Definir el puerto para el servidor
-const PORT = 3000;
+const PORT = 8080;
 
 server.get('/ping', (req, res) => {
     res.json({message: 'pong-Chulde' })
