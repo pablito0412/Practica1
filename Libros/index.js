@@ -15,8 +15,24 @@ let libros = [
   { id: 3, titulo: "Sistemas Operativos", autor: "Antonio Lema" }
 ];
 
-// Ruta para obtener todos los libros
+// Ruta para obtener todos los libros o buscar por autor
 server.get('/libros', (req, res) => {
+  const autorBuscado = req.query.autor;
+
+  // Si se proporciona el query ?autor=...
+  if (autorBuscado) {
+    const resultado = libros.filter(libro =>
+      libro.autor.toLowerCase().includes(autorBuscado.toLowerCase())
+    );
+
+    if (resultado.length === 0) {
+      return res.status(404).json({ mensaje: "No se encontraron libros del autor especificado." });
+    }
+
+    return res.json(resultado);
+  }
+
+  // Si no hay query ?autor=..., devolver todos los libros
   res.json(libros);
 });
 
@@ -31,7 +47,6 @@ server.get('/libros/:id', (req, res) => {
     res.status(404).json({ error: 'Libro no encontrado' });
   }
 });
-
 // Crear un nuevo libro
 server.post('/libros', (req, res) => {
   const { titulo, autor } = req.body;
